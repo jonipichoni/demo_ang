@@ -3,8 +3,23 @@ var morgan = require('morgan');
 var bodyParser = require('body-parser');
 var path = require("path");
 
+var fs    = require('fs');
+var nconf = require('nconf');
+
+
+//
+// Setup nconf to use (in-order):
+//   1. Command-line arguments
+//   2. Environment variables
+//   3. A file located at 'path/to/config.json'
+//
+nconf.argv()
+ .env()
+ .file({ file: 'config.json' });
+
+
 var app = express();
-app.set('port', (process.env.PORT || 8080));
+app.set('port', (process.env.PORT || nconf.get('port') || 8080));
 
 app.use('/', express.static(__dirname + '/../dist'));
 app.use('/scripts', express.static(__dirname + '/../node_modules'));
