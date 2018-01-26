@@ -11,8 +11,8 @@
     "start2": "concurrently \"webpack --watch --colors\"",
     "dev_all": "concurrently \"webpack --watch --config config/webpack.dev.js --progress --profile --bail\" \"node server/main.js\"",
     "dev_client": "webpack --watch --config config/webpack.dev.js --progress --profile --bail",
-    "dev_server": "node server/main.js",
-    "dev_server2": "nodemon server/main.js"
+    "dev_server2": "node server/main.js",
+    "dev_server": "nodemon server/main.js"
   },
   "license": "MIT",
   "dependencies": {
