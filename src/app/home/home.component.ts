@@ -14,7 +14,6 @@ export class HomeComponent implements OnInit {
 
     constructor(private userService: UserService) {
         var data = JSON.parse(localStorage.getItem('currentUser'));
-        console.log("_XF3",data);
 
         var a = {
             id : 1,
