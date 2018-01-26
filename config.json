@@ -4,7 +4,7 @@
   	"server": "asd"
   },
   "log" : {
-  	"fileName" : "server2.log",
+  	"fileName" : "server.log",
   	"level" : "debug"
   }
 }
