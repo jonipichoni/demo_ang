@@ -7,6 +7,8 @@ var log4js = require('log4js');
 
 var conf = require('./conf');
 var ldapClient = require('./ldap');
+var auth = require('./auth');
+
 
 
 // LOG CONFIG
@@ -47,12 +49,17 @@ app.use(morgan('dev'));
 
 app.set('port', (process.env.PORT || conf.get('port') || 8080));
 
+if(typeof conf.get('jwt_secret') === 'undefined') {
+  logger.error("Missing jwt secret on config");
+  return;
+}
+app.set('superSecret', conf.get('jwt_secret')); 
+
 app.use('/', express.static(__dirname + '/../dist'));
 app.use('/scripts', express.static(__dirname + '/../node_modules'));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
 
 
 /*app.use(function (req, res, next) {
@@ -72,9 +79,26 @@ app.get('/login', function (req, res) {
 
 // POST method route
 app.post('/api/authenticate', function (req, res) {
-	logger.debug("WTF2");
-  res.send('POST request to the homepage');
+  auth.authenticateUser(req,res);
 })
+
+app.get('/api/checkAuth', function (req, res) {
+  auth.checkAuth(req,res);
+})
+
+
+// Middleware to protect following routes?
+// req._isAuth , is it authed?
+// req._userName , username of the logged user
+app.use(function(req, res, next) {
+  auth.middleAuth(req,res);
+  next();
+});
+
+app.get('/api/random', function (req, res) {
+  res.send("OK");
+})
+
 
 app.listen(app.get('port'), function() {
     logger.debug('Angular2 fullstack listening on port '+app.get('port'));

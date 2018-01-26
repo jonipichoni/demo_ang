@@ -43,7 +43,7 @@ import { RegisterComponent } from './register/index';
         },
 
         // provider used to create fake backend
-        fakeBackendProvider
+        //fakeBackendProvider
     ],
     bootstrap: [AppComponent]
 })

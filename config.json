@@ -10,5 +10,6 @@
   "log" : {
   	"fileName" : "server.log",
   	"level" : "debug"
-  }
+  },
+  "jwt_secret" : "testsecret"
 }
