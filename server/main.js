@@ -73,6 +73,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
     }
 });*/
 
+
+// Not middleware api calls
 app.get('/login', function (req, res) {
   res.sendFile(path.resolve(__dirname + '/../dist/index.html'));
 })
@@ -94,6 +96,8 @@ app.use(function(req, res, next) {
   auth.middleAuth(req,res);
   next();
 });
+
+// Middleware api calls
 
 app.get('/api/random', function (req, res) {
   res.send("OK");
