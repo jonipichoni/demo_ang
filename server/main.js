@@ -8,6 +8,7 @@ var log4js = require('log4js');
 var conf = require('./conf');
 var ldapClient = require('./ldap');
 var auth = require('./auth');
+var sql = require('./sql');
 
 
 
@@ -18,15 +19,23 @@ var logLevel    = logConfig['level'] || 'debug';
 
 log4js.configure({
   appenders: { 
-  	tofile: { type: 'file', 
-      filename: logFileName},
+  	tofile: { 
+      type: 'file', 
+      filename: logFileName
+    },
   	console: { type: 'console' }
   },
-  categories: { default: { appenders: ['tofile','console'], level: logLevel } }
+  categories: { 
+      default: { 
+        appenders: ['tofile','console'], 
+        level: logLevel 
+      }
+    }
 });
 
 var logger = log4js.getLogger();
 
+// VALIDATE LDAP 
 function valCred(ret) {	
 	if(ret) {
 		logger.debug("Connection to Ldap: OK");
@@ -45,6 +54,21 @@ if(!ldapClient.validateCredentials(
   logger.error('Failed to connect to the ldap server');
 }
 
+// VALIDATE DB
+function valDB(ret) { 
+  if(ret) {
+    logger.debug("Connection to DB: OK");
+  } else {
+    var ret = "Connection to DB: Failed";
+    logger.error(ret);
+    throw (ret);
+  }
+}
+
+sql.checkDB(valDB);
+
+
+// CONFIGURE EXPRESS
 
 var app = express();
 // Logger express modules
@@ -98,6 +122,12 @@ app.get('/api/checkAuth', function (req, res) {
 // req._userName , username of the logged user
 app.use(function(req, res, next) {
   auth.middleAuth(req,res);
+
+  if(!req._isAUth) {
+    res.status(401);
+    res.send(JSON.stringify({ 'error': 'Session expired or not valid' }));
+    return;
+  }
   next();
 });
 
@@ -107,6 +137,13 @@ app.get('/api/random', function (req, res) {
   res.send("OK");
 })
 
+app.get('/api/res', function (req, res) {
+  res.send("OK");
+})
+
+app.get('/api/users', function (req, res) {
+  res.send("OK");
+})
 
 app.listen(app.get('port'), function() {
     logger.debug('Demo Angular istening on port '+app.get('port'));

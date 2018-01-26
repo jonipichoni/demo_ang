@@ -20,12 +20,14 @@ Auth.prototype.middleAuth = function (req,res) {
 
   var token = req.headers.authorization.split(' ')[1];
 
+  // somehow this is sync
   jwt.verify(token, conf.get('jwt_secret'), function(err, decoded) {
     if (!err) {
       req._isAUth = true;
       req._userName = decoded['user'];
     }
   });
+
 }
 
 Auth.prototype.checkAuth = function (req,res) {
@@ -59,7 +61,7 @@ Auth.prototype.authenticateUser = function (req,res) {
     
     var ret ='Username or Password missing'; 
     logger.debug(ret)
-    res.status(400);
+    res.status(401);
     res.send(JSON.stringify({ error: ret }));
 
     return;

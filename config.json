@@ -11,5 +11,11 @@
   	"fileName" : "server.log",
   	"level" : "debug"
   },
+  "db" : {
+  	"user" : "userdb",
+  	"password" : "Test123",
+  	"server" : "192.168.1.39",
+  	"database" : "demo_ang"
+  },
   "jwt_secret" : "testsecret"
 }

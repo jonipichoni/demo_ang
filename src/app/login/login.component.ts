@@ -20,11 +20,12 @@ export class LoginComponent implements OnInit {
         private alertService: AlertService) { }
 
     ngOnInit() {
+        console.log("ngOnInt login");
         // reset login status
         this.authenticationService.logout();
 
         // get return url from route parameters or default to '/'
-        this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/main';
+        this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
     }
 
     login() {
@@ -35,7 +36,7 @@ export class LoginComponent implements OnInit {
                     this.router.navigate([this.returnUrl]);
                 },
                 error => {
-                    console.log(error);
+                    // nasty
                     if(error.error.error) {
                         this.alertService.error(error.error.error);    
                     } else {
