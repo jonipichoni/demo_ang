@@ -1,3 +1,10 @@
 {
-  "port": 8080,
+  "port": 8090,
+  "ldap" : {
+  	"server": "asd"
+  },
+  "log" : {
+  	"fileName" : "server2.log",
+  	"level" : "debug"
+  }
 }

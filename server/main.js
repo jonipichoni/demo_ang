@@ -2,24 +2,47 @@ var express = require('express');
 var morgan = require('morgan'); 
 var bodyParser = require('body-parser');
 var path = require("path");
-
 var fs    = require('fs');
-var nconf = require('nconf');
+var log4js = require('log4js');
+
+var conf = require('./conf');
+var ldapClient = require('./ldap');
 
 
-//
-// Setup nconf to use (in-order):
-//   1. Command-line arguments
-//   2. Environment variables
-//   3. A file located at 'path/to/config.json'
-//
-nconf.argv()
- .env()
- .file({ file: 'config.json' });
+// LOG CONFIG
+var logConfig   = conf.get('log');
+var logFileName = logConfig['fileName'] || 'server.log';
+var logLevel    = logConfig['level'] || 'debug';
+
+log4js.configure({
+  appenders: { 
+  	tofile: { type: 'file', filename: logFileName, 
+  		maxLogSize: 1024,
+      backups: 3},
+  	console: { type: 'console' }
+  },
+  categories: { default: { appenders: ['tofile','console'], level: logLevel } }
+});
+
+var logger = log4js.getLogger();
+
+function valCred(ret) {	
+	if(ret) {
+		logger.debug("GOOD2");
+	} else {
+		logger.debug("FALSE2");
+	}
+}
+
+if(ldapClient.validateCredentials("asd","asd",valCred)) {
+	logger.debug("GOOD");
+} else {
+	logger.debug("BAD");
+}
 
 
 var app = express();
-app.set('port', (process.env.PORT || nconf.get('port') || 8080));
+app.set('port', (process.env.PORT || conf.get('port') || 8080));
 
 app.use('/', express.static(__dirname + '/../dist'));
 app.use('/scripts', express.static(__dirname + '/../node_modules'));
@@ -47,10 +70,10 @@ app.get('/login', function (req, res) {
 
 // POST method route
 app.post('/api/authenticate', function (req, res) {
-	console.log("WTF2");
+	logger.debug("WTF2");
   res.send('POST request to the homepage');
 })
 
 app.listen(app.get('port'), function() {
-    console.log('Angular2 fullstack listening on port '+app.get('port'));
+    logger.debug('Angular2 fullstack listening on port '+app.get('port'));
 });
