@@ -24,7 +24,7 @@ export class LoginComponent implements OnInit {
         this.authenticationService.logout();
 
         // get return url from route parameters or default to '/'
-        this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+        this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/main';
     }
 
     login() {
@@ -36,8 +36,8 @@ export class LoginComponent implements OnInit {
                 },
                 error => {
                     console.log(error);
-                    if(error.error) {
-                        this.alertService.error(error.error);    
+                    if(error.error.error) {
+                        this.alertService.error(error.error.error);    
                     } else {
                         this.alertService.error(error);    
                     }

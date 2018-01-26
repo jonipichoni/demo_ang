@@ -9,19 +9,20 @@ export class AuthenticationService {
 
     login(username: string, password: string) {
         return this.http.post<any>('/api/authenticate', { username: username, password: password })
-            .map(user => {
+            .map(data => {
+                console.log("_XF2");
+                console.log(data);
                 // login successful if there's a jwt token in the response
-                if (user && user.token) {
+                if (data && data.token) {
                     // store user details and jwt token in local storage to keep user logged in between page refreshes
-                    localStorage.setItem('currentUser', JSON.stringify(user));
+                    localStorage.setItem('currentUser', JSON.stringify(data));
                 }
 
-                return user;
+                return data;
             });
     }
 
     logout() {
-        console.log("asd");
         // remove user from local storage to log user out
         localStorage.removeItem('currentUser');
     }

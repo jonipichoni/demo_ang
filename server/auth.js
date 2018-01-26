@@ -56,6 +56,7 @@ Auth.prototype.authenticateUser = function (req,res) {
 
   if(typeof req.body.username === 'undefined' ||
     typeof req.body.password === 'undefined') {
+    
     var ret ='Username or Password missing'; 
     logger.debug(ret)
     res.status(400);
@@ -81,7 +82,10 @@ Auth.prototype.authenticateUser = function (req,res) {
       res.headers.authorization = 'Bearer ' + token;*/
 
       res.status(200);
-      res.send(JSON.stringify({ token: token }));
+      res.send(JSON.stringify({ 
+        token: token ,
+        userName: username
+      }));
     } else {
       res.status(401);
       res.send(JSON.stringify({ error: 'Authentication Failed' }));

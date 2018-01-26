@@ -13,7 +13,18 @@ export class HomeComponent implements OnInit {
     users: User[] = [];
 
     constructor(private userService: UserService) {
-        this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        var data = JSON.parse(localStorage.getItem('currentUser'));
+        console.log("_XF3",data);
+
+        var a = {
+            id : 1,
+            firstName : "NA",
+            lastName : "NA",
+            username : data['userName'],
+            password : ""
+        };
+
+        this.currentUser = a;
     }
 
     ngOnInit() {
