@@ -1,7 +1,11 @@
 {
   "port": 8080,
   "ldap" : {
-  	"server": "asd"
+  	"server": "192.168.1.39",
+  	"port" : "389",
+  	"base" : "DC=FOREST,DC=COM",
+  	"bindDN" : "FOREST\\Administrator",
+  	"bindCredentials" : "Test123"
   },
   "log" : {
   	"fileName" : "server.log",

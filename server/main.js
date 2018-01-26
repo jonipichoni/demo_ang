@@ -16,9 +16,8 @@ var logLevel    = logConfig['level'] || 'debug';
 
 log4js.configure({
   appenders: { 
-  	tofile: { type: 'file', filename: logFileName, 
-  		maxLogSize: 1024,
-      backups: 3},
+  	tofile: { type: 'file', 
+      filename: logFileName},
   	console: { type: 'console' }
   },
   categories: { default: { appenders: ['tofile','console'], level: logLevel } }
@@ -34,7 +33,7 @@ function valCred(ret) {
 	}
 }
 
-if(ldapClient.validateCredentials("asd","asd",valCred)) {
+if(ldapClient.validateCredentials("FOREST\\Administrator","Test123",valCred)) {
 	logger.debug("GOOD");
 } else {
 	logger.debug("BAD");
@@ -42,16 +41,19 @@ if(ldapClient.validateCredentials("asd","asd",valCred)) {
 
 
 var app = express();
+// Logger express modules
+app.use(log4js.connectLogger(logger));
+app.use(morgan('dev'));
+
 app.set('port', (process.env.PORT || conf.get('port') || 8080));
 
 app.use('/', express.static(__dirname + '/../dist'));
 app.use('/scripts', express.static(__dirname + '/../node_modules'));
 
-
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use(morgan('dev'));
+
 
 /*app.use(function (req, res, next) {
     if (path.extname(req.path).length > 0) {
