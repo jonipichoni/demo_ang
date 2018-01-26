@@ -27,7 +27,7 @@ function LdapClient() {
 
 LdapClient.prototype.validateCredentials = function (user,password,cb) {
 
-  logger.debug("Validate Credentials");
+  logger.debug("ldap: validating credentials for: ",user);
 
 	var client  = ldap.createClient({
     url:            this._options.url,
@@ -35,6 +35,8 @@ LdapClient.prototype.validateCredentials = function (user,password,cb) {
 
   client.on('error', function(err){
 		logger.error('LDAP connection error:', err);
+    cb(false);
+    return;
 	});
 
   client.bind(user,password, function(err) {

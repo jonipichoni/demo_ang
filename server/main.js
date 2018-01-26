@@ -29,16 +29,20 @@ var logger = log4js.getLogger();
 
 function valCred(ret) {	
 	if(ret) {
-		logger.debug("GOOD2");
+		logger.debug("Connection to Ldap: OK");
 	} else {
-		logger.debug("FALSE2");
+    var ret = "Connection to Ldap: Failed";
+		logger.error(ret);
+    throw (ret);
 	}
 }
 
-if(ldapClient.validateCredentials("FOREST\\Administrator","Test123",valCred)) {
-	logger.debug("GOOD");
-} else {
-	logger.debug("BAD");
+
+if(!ldapClient.validateCredentials(
+    conf.get('ldap')['bindDN'],
+    conf.get('ldap')['bindCredentials'],
+    valCred)) {
+  logger.error('Failed to connect to the ldap server');
 }
 
 
@@ -105,5 +109,5 @@ app.get('/api/random', function (req, res) {
 
 
 app.listen(app.get('port'), function() {
-    logger.debug('Angular2 fullstack listening on port '+app.get('port'));
+    logger.debug('Demo Angular istening on port '+app.get('port'));
 });
