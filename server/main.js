@@ -101,16 +101,24 @@ var options = {
     rejectUnauthorized: false
 };
 
-var server = https.createServer(options, app).listen(app.get('port'), function(){
+var server = https.createServer(options, app).listen(
+  app.get('port'), 
+  function(){
     logger.debug('Demo Angular istening on port '+app.get('port'));
-});
+  }
+);
 
 /*app.listen(app.get('port'), function() {
     logger.debug('Demo Angular istening on port '+app.get('port'));
 });*/
 
-
 // Not middleware api calls
+
+app.get('/favicon.ico', function(req, res) {
+    res.writeHead(200, {'Content-Type': 'image/x-icon'} );
+    res.end(/* icon content here */);
+});
+
 app.get('/login', function (req, res) {
   res.sendFile(path.resolve(__dirname + '/../dist/index.html'));
 })

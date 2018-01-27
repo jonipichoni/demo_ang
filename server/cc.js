@@ -21,8 +21,7 @@ CCData.prototype.getCCData = function (req,res) {
   };
 
   sql.exec('select * from credit_card',respCb);
-
-
+  
 };
 
 
