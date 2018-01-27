@@ -17,13 +17,13 @@
 
 ## Features
 
-SERVER
-	Rest API
-	Ldap access against ActiveDirectory
-	SQL Server connector
-	JWT Authentication
-CLIENT
-	Angular5
+	SERVER
+		Rest API
+		Ldap access against ActiveDirectory
+		SQL Server connector
+		JWT Authentication
+	CLIENT
+		Angular5
 
 ## Features
 
