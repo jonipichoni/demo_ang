@@ -25,6 +25,6 @@
 	CLIENT
 		Angular5
 
-## Features
+## Configuration
 
 	see config.json
