@@ -20,7 +20,7 @@ if(typeof ldapConfig['server'] === 'undefined' ||
 
 function LdapClient() {
 	this._options = {
-  	url:             "ldap://"+ldapConfig['server']+":"+ldapConfig['port']
+  	url:"ldap://"+ldapConfig['server']+":"+ldapConfig['port']
   };
   
 };

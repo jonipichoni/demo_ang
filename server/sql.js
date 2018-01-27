@@ -32,89 +32,79 @@ if(typeof dbConfig['user'] === 'undefined' ||
 }
 
 function SqlClient() {
+  this.pool = null;
   this._config = {
     user: dbConfig['user'],
     password: dbConfig['password'],
     server: dbConfig['server'], // You can use 'localhost\\instance' to connect to named instance
     database: dbConfig['database'],
-
+    pool: {
+      max: 10,
+      min: 5,
+      idleTimeoutMillis: 30000
+    },
     options: {
       encrypt: true // Use this if you're on Windows Azure
     }
   };
 };
 
-SqlClient.prototype.checkDB = function (cb) {
-  logger.debug("sql: checkDB");
+SqlClient.prototype.checkDB= function (cb) {
+    // connect to your database
+  //sql.connect(this._config, function (err) {
+  this.pool = new sql.ConnectionPool(this._config).connect(function (err) {
+    if (err) {
+      console.log(err);
+      cb(false);
+      return;
+    } else {
+      cb(true);
+      return;
+    }
+   });
+};
 
-  // connect to your database
-  sql.connect(this._config, function (err) {
+/*
+console.log(result.recordsets.length) // count of recordsets returned by the procedure
+    console.log(result.recordsets[0].length) // count of rows contained in first recordset
+    console.log(result.recordset) // first recordset from result.recordsets
+    console.log(result.returnValue) // procedure return value
+    console.log(result.output) // key/value collection of output values
+    console.log(result.rowsAffected) // array of numbers, each number represents 
+    the number of rows affected by executed statemens
+    */
+SqlClient.prototype.exec = function (query,cb) {
 
-      if (err) {
+  logger.debug("sql exec");
+
+  // create Request object
+  var request = new sql.Request(this.pool);
+
+  // query to the database and get the records
+  request.query(query, 
+    function (err, result) {
+      if (err)  {
         logger.error(err);
-        cb(false);
+        cb(null,false);
         return;
       }
 
-      cb(true);
+      // send records as a response
+      //res.send(recordset);
+      console.log(result);
+      cb(result,true);
       return;
   });
 
   sql.on('error', err => {
     // ... error handler
     logger.error(err);
-    cb(false);
+    cb(null,false);
     return;
   })
 
   return;
 };
-
-SqlClient.prototype.getCCList = function (cb) {
-
-  logger.debug("sql: getting cc ");
-
-  // connect to your database
-  sql.connect(this._config, function (err) {
-
-      if (err) {
-        logger.error(err);
-        cb(false);
-        return;
-      }
-
-      // create Request object
-      var request = new sql.Request();
-
-      // query to the database and get the records
-      request.query('select * from credit_card', function (err, recordset) {
-
-          if (err)  {
-            logger.error(err);
-            cb(false);
-            return;
-          }
-
-          // send records as a response
-          //res.send(recordset);
-          console.log(recordset);
-          cb(true);
-          return;
-
-      });
-  });
-
-  sql.on('error', err => {
-    // ... error handler
-    logger.error(err);
-    cb(false);
-    return;
-  })
-
-  return;
-
-};
-
 
 
 if(typeof module !== 'undefined' && module.exports) {

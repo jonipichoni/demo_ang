@@ -41,12 +41,12 @@ Auth.prototype.checkAuth = function (req,res) {
   jwt.verify(token, conf.get('jwt_secret'), function(err, decoded) {
     if (err) {
       res.status(401);
-      res.send(JSON.stringify({ 'error': err }));
+      res.json({ 'error': err });
     } else {
       res.status(200);
-      res.send(JSON.stringify({ 
+      res.json({ 
         'data': decoded 
-      }));
+      });
     }
   });
 
@@ -62,7 +62,7 @@ Auth.prototype.authenticateUser = function (req,res) {
     var ret ='Username or Password missing'; 
     logger.debug(ret)
     res.status(401);
-    res.send(JSON.stringify({ error: ret }));
+    res.json({ error: ret });
 
     return;
   }
@@ -84,13 +84,13 @@ Auth.prototype.authenticateUser = function (req,res) {
       res.headers.authorization = 'Bearer ' + token;*/
 
       res.status(200);
-      res.send(JSON.stringify({ 
+      res.json({ 
         token: token ,
         userName: username
-      }));
+      });
     } else {
       res.status(401);
-      res.send(JSON.stringify({ error: 'Authentication Failed' }));
+      res.json({ error: 'Authentication Failed' });
     }
   }
 

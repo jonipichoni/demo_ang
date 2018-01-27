@@ -9,6 +9,7 @@ var conf = require('./conf');
 var ldapClient = require('./ldap');
 var auth = require('./auth');
 var sql = require('./sql');
+var cc = require('./cc');
 
 
 
@@ -125,7 +126,7 @@ app.use(function(req, res, next) {
 
   if(!req._isAUth) {
     res.status(401);
-    res.send(JSON.stringify({ 'error': 'Session expired or not valid' }));
+    res.json({ 'error': 'Session expired or not valid' });
     return;
   }
   next();
@@ -143,6 +144,10 @@ app.get('/api/res', function (req, res) {
 
 app.get('/api/users', function (req, res) {
   res.send("OK");
+})
+
+app.get('/api/cc', function (req, res) {
+  cc.getCCData(req,res);
 })
 
 app.listen(app.get('port'), function() {
