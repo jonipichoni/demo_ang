@@ -1,4 +1,4 @@
-# Demo Page Angular with JWT Auth and RET API server
+# Demo Page Angular with JWT Auth and REST API server
 
 ## Installation
 
