@@ -2,7 +2,10 @@ var express = require('express');
 var morgan = require('morgan'); 
 var bodyParser = require('body-parser');
 var path = require("path");
-var fs    = require('fs');
+var fs = require('fs');
+var http = require('http');
+var https = require('https');
+
 var log4js = require('log4js');
 
 var conf = require('./conf');
@@ -91,15 +94,19 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 
-/*app.use(function (req, res, next) {
-    if (path.extname(req.path).length > 0) {
-        // normal static file request
-        next();
-    }
-    else {
-        // redirect all html requests to `index.html`
-        res.sendFile(path.resolve(__dirname + '/../dist/index.html'));
-    }
+var options = {
+    key: fs.readFileSync('certificates/localhost.key'),
+    cert: fs.readFileSync('certificates/localhost.crt'),
+    requestCert: false,
+    rejectUnauthorized: false
+};
+
+var server = https.createServer(options, app).listen(app.get('port'), function(){
+    logger.debug('Demo Angular istening on port '+app.get('port'));
+});
+
+/*app.listen(app.get('port'), function() {
+    logger.debug('Demo Angular istening on port '+app.get('port'));
 });*/
 
 
@@ -136,20 +143,17 @@ app.use(function(req, res, next) {
 
 app.get('/api/random', function (req, res) {
   res.send("OK");
-})
+});
 
 app.get('/api/res', function (req, res) {
   res.send("OK");
-})
+});
 
 app.get('/api/users', function (req, res) {
   res.send("OK");
-})
+});
 
 app.get('/api/cc', function (req, res) {
   cc.getCCData(req,res);
-})
-
-app.listen(app.get('port'), function() {
-    logger.debug('Demo Angular istening on port '+app.get('port'));
 });
+

@@ -9,7 +9,7 @@
     "start": "webpack-dev-server --inline --progress --port 8080",
     "build": "rimraf dist && webpack --config config/webpack.prod.js --progress --profile --bail",
     "start2": "concurrently \"webpack --watch --colors\"",
-    "dev_all": "concurrently \"webpack --watch --config config/webpack.dev.js --progress --profile --bail\" \"node server/main.js\"",
+    "dev_all": "concurrently \"webpack --watch --config config/webpack.dev.js --progress --profile --bail\" \"nodemon server/main.js\"",
     "dev_client": "webpack --watch --config config/webpack.dev.js --progress --profile --bail",
     "dev_server2": "node server/main.js",
     "dev_server": "nodemon server/main.js"
@@ -27,6 +27,8 @@
     "body-parser": "^1.17.2",
     "core-js": "^2.4.1",
     "express": "^4.15.3",
+    "http": "0.0.0",
+    "https": "^1.0.0",
     "jsonwebtoken": "^8.1.1",
     "ldapjs": "^1.0.2",
     "log4js": "^2.5.2",
